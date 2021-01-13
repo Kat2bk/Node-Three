@@ -22,7 +22,7 @@ Follow these steps to set up and work on your project:
 
 #### Custom Middleware Requirements
 
-- `logger()`
+<!-- - `logger()`
 
   - `logger` logs to the console the following information about each request: request method, request url, and a timestamp
   - this middleware runs on every request made to the API
@@ -42,7 +42,7 @@ Follow these steps to set up and work on your project:
 - `validatePost()`
   - `validatePost` validates the `body` on a request to create a new post
   - if the request `body` is missing, respond with status `400` and `{ message: "missing post data" }`
-  - if the request `body` lacks the required `text` field, respond with status `400` and `{ message: "missing required text field" }`
+  - if the request `body` lacks the required `text` field, respond with status `400` and `{ message: "missing required text field" }` -->
 
 ### Database Persistence Helpers
 
