@@ -11,8 +11,6 @@ server.get('/', (req, res) => {
   res.send(`<h2>Let's write some middleware!</h2>`);
 });
 
-server.use(logErrors)
-
 //custom middleware
 
 function logger(req, res, next) {
@@ -68,15 +66,5 @@ function validatePost(req, res, next) {
 //   console.error(err.stack)
 //   res.status(500).send('something broke, try again later!')
 // }
-
-function logErrors (err, req, res, next) {
-  console.error(err.stack)
-  res.status(err.status || 500).send({
-    err: {
-      status: err.status || 500,
-      message: error.message || "Internal Server Error"
-    }
-  })
-}
 
 module.exports = server;
