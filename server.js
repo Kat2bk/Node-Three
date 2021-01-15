@@ -6,7 +6,7 @@ server.use(express.json())
 
 server.use(logger)
 
-server.use('/api/users', validateUserID, userRouter);
+server.use('/api/users', userRouter);
 server.use('/api/posts', postsRouter);
 
 server.get('/', (req, res) => {
