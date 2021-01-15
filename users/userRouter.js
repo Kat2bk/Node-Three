@@ -23,6 +23,7 @@ router.post('/', (req, res) => {
 
 router.post('/:id/posts', (req, res) => {
   // do your magic!
+
 });
 
 router.get('/', (req, res) => {
@@ -37,7 +38,7 @@ router.get('/', (req, res) => {
   })
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', validateUserId, (req, res, next) => {
   // do your magic!
   const {id} = req.params;
   users.getById(id)
@@ -57,7 +58,7 @@ router.get('/:id', (req, res, next) => {
   })
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId, (req, res) => {
   // do your magic!
   const {id} = req.params;
   users.getUserPosts(id)
@@ -70,7 +71,7 @@ router.get('/:id/posts', (req, res) => {
   })
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId, (req, res) => {
   // do your magic!
   const {id} = req.params;
   users.remove(id)
@@ -83,7 +84,7 @@ router.delete('/:id', (req, res) => {
   })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', validateUserId, (req, res) => {
   // do your magic!
   const id = req.params.id;
   const {name} = req.body;
@@ -108,13 +109,14 @@ router.put('/:id', (req, res) => {
 
 function validateUserId(req, res, next) {
   // do your magic!
-  if (req.user.id) {
-    req.user = user
+  if (req.params.id) {
+    req.user = req.params.id
     next()
   } else {
-    res.status(404).json({
-      message: "Unable to find user"
-  })
+    // res.status(404).json({
+    //   message: "Unable to find user"
+    next({code: 404, message: "Unable to find user"})
+  }
 }
 
 function validateUser(req, res, next) {
@@ -125,15 +127,18 @@ function validatePost(req, res, next) {
   // do your magic!
 }
 
-// router.use(error, req, res, next => {
-//   // console.log(err.stack)
-//   res.code({code: error.code}).json({message: error.message})
-// }) 
 
-router.use((error, req, res, next) => {
-  // console.log(error.stack)
-  res.status(error.code).json({message: error.message})
-})
+// router.use(function(error, req, res, next) {
+//   console.log(error.message);
+//   res.statusCode(error.code).send({ message: error.message})
+//     // error.status).json({message: error.message})
+// })
+
+router.use(function(err, req, res, next) {
+  console.error(err.message); // Log error message in our server's console
+  if (!err.statusCode) err.statusCode = 500; // If err has no specified error code, set error code to 'Internal Server Error (500)'
+  res.status(err.statusCode).send(err.message); // All HTTP requests must have a response, so let's send back an error with its status code and message
+});
 
 // (err, req, res, next) {
 //   console.error(err.stack)
